@@ -13,7 +13,7 @@ fn pt2(input: &str) -> i32 {
     let pattern = r"mul\((\d+),(\d+)\)|do\(\)|don't\(\)";
     let re = Regex::new(pattern).unwrap();
     let mut sum: i32 = 0;
-    let mut enable = false;
+    let mut enable = true;
     for cap in re.captures_iter(input) {
         if cap[0].contains("do()") {
             enable = true;
@@ -51,6 +51,6 @@ mod test {
         let input = include_str!("pt1.txt").trim_end();
         let output = pt2(input);
         println!("{}", output);
-        assert!(output == 3508942);
+        assert!(output == 82868252);
     }
 }

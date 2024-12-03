@@ -7,7 +7,7 @@ fn pt1(input: &str) -> i32 {
     let mut safe = 0;
     for line in lines {
         let levels: Vec<i32> = line.split(" ").map(|x| x.parse().unwrap()).collect();
-        if is_line_safe(levels) {
+        if is_line_safe(levels, false) {
             safe += 1;
         }
     }
@@ -19,7 +19,7 @@ fn pt2(input: &str) -> i32 {
     let mut safe = 0;
     for line in lines {
         let levels: Vec<i32> = line.split(" ").map(|x| x.parse().unwrap()).collect();
-        if is_line_less_safe(levels) {
+        if is_line_safe(levels, true) {
             safe += 1;
         }
     }
@@ -44,7 +44,7 @@ fn pair_safe(l1: i32, l2: i32, change: &Change) -> bool {
     };
 }
 
-fn is_line_safe(levels: Vec<i32>) -> bool {
+fn is_line_safe(levels: Vec<i32>, problem_dampener: bool) -> bool {
     let change = if (levels[1] - levels[0]).signum() == 1 {
         Change::Inc
     } else {
@@ -52,30 +52,25 @@ fn is_line_safe(levels: Vec<i32>) -> bool {
     };
     for i in 0..levels.len() - 1 {
         if !pair_safe(levels[i], levels[i + 1], &change) {
-            return false;
+            if problem_dampener {
+                return is_line_less_safe(levels);
+            } else {
+                return false;
+            }
         }
     }
     return true;
 }
 
 fn is_line_less_safe(levels: Vec<i32>) -> bool {
-    let change = if (levels[1] - levels[0]).signum() == 1 {
-        Change::Inc
-    } else {
-        Change::Dec
-    };
-    for i in 0..levels.len() - 1 {
-        if !pair_safe(levels[i], levels[i + 1], &change) {
-            let mut l1 = levels.clone();
-            l1.remove(i);
-            let mut l2 = levels.clone();
-            l2.remove(i + 1);
-            if !is_line_safe(l1) && !is_line_safe(l2) {
-                return false;
-            }
+    for i in 0..levels.len() {
+        let mut l1 = levels.clone();
+        l1.remove(i);
+        if is_line_safe(l1, false) {
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 #[cfg(test)]
@@ -117,6 +112,6 @@ mod test {
         let input = include_str!("pt1.txt").trim_end();
         let output = pt2(input);
         println!("{}", output);
-        assert!(output == 529); // this is wrong
+        assert!(output == 536);
     }
 }
