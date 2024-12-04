@@ -32,7 +32,9 @@ mod test {
     #[test]
     fn pt1_example() {
         let input = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))";
-        assert!(pt1(input) == 161);
+        let output = pt1(input);
+        println!("{}", output);
+        assert!(output == 161);
     }
     #[test]
     fn pt1_test() {
@@ -44,7 +46,9 @@ mod test {
     #[test]
     fn pt2_example() {
         let input = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
-        assert!(pt2(input) == 48);
+        let output = pt2(input);
+        println!("{}", output);
+        assert!(output == 48);
     }
     #[test]
     fn pt2_test() {
